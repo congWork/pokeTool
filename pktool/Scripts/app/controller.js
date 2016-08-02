@@ -1,0 +1,83 @@
+﻿angular.module("ctrl", ['svc'])
+    .constant("APPCONFIG",
+    {
+
+    })
+    .controller("baseController", ["$rootScope", '$window',
+        function ( $rootScope,$window) {
+            var vm = this;
+         
+         
+        }])
+      .controller("homeController",
+    [
+        "$rootScope", "$state", "$stateParams", '$window', '$document','$scope','appServices',
+        function ($rootScope, $state, $stateParams, $window, $document, $scope, appServices) {
+            var vm = this;
+            vm.isOpen = false;
+            vm.currentLocation = null;
+            vm.currentLocationString = 'none';
+            vm.pokeList = [];
+            vm.dropDownPokeNameSource = ['name1', 'name2','dratini'];
+            vm.wantedPokeList = [];
+
+            vm.copyLocation = function (toCopy) {
+               
+                try {
+                    var successful = document.execCommand('copy');
+                    if (!successful) throw successful;
+                    console.log(window.getSelection());
+                } catch (err) {
+                    console.log("failed to copy", toCopy);
+                }
+            };
+            var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var labelIndex = 0;
+            var marker = null;
+            
+            function initialize() {
+                var bangalore = { lat: 12.97, lng: 77.59 };
+                var map = new google.maps.Map(document.getElementById('map'), { zoom: 12, center: bangalore });
+                // This event listener calls addMarker() when the map is clicked.
+                google.maps.event.addListener(map, 'click', function (event) {
+                    vm.currentLocation = event.latLng;
+                    $scope.$apply(function () {
+                        vm.currentLocationString = vm.currentLocation.lat() + ',' + vm.currentLocation.lng();
+                    });
+                    
+                    clearMarkers();
+                    addMarker(event.latLng, map);
+
+                    //get pok data
+                    appServices.get(vm.currentLocation).success(function (data) {
+                        if (data != null) {
+                            vm.pokeList = data;
+                        }
+
+                    }).error(function () {
+                        alert("Error");
+                    });
+                });
+                // Add a marker at the center of the map. 
+                addMarker(bangalore, map);
+            }
+            // Adds a marker to the map. 
+            function addMarker(location, map) {
+                // Add the marker at the clicked location, and add the next-available label
+                // from the array of alphabetical characters.
+                 marker = new google.maps.Marker({
+                    position: location, label: labels[labelIndex++ % labels.length], map: map
+                });
+            }
+            function clearMarkers() {
+                setMapOnAll(null);
+            }
+            function setMapOnAll(map) {
+                    marker.setMap(map);
+            }
+
+
+            google.maps.event.addDomListener($window, 'load', initialize);
+        }
+    ])
+;

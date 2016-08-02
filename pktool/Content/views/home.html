@@ -1,0 +1,61 @@
+﻿
+
+<div style="position: relative; width: 100%; height: 800px; display: block;">
+    <div id="map"></div>
+</div>
+<div layout="column" ng-cloak>
+<md-content class="md-padding" layout="column">
+    <div class="lock-size" layout="row" layout-align="center center">
+        <md-fab-speed-dial md-open="home.isOpen" md-direction="down" ng-class="md-fling">
+            <md-fab-trigger>
+                <md-button aria-label="menu" class="md-fab md-warn">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                </md-button>
+            </md-fab-trigger>
+            <md-fab-actions>
+                <div class="md-fab md-raised md-mini">
+                    <md-input-container>
+                        <label>Filter</label>
+                        <md-select ng-model="home.wantedPokeList" multiple>
+
+                            <md-option ng-value="n" ng-repeat="n in home.dropDownPokeNameSource">{{n}}</md-option>
+
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+
+            </md-fab-actions>
+        </md-fab-speed-dial>
+    </div>
+</md-content>
+</div>
+
+        <md-content flex layout-padding>
+            <form name="homeForm" novalidate>
+                <div class="form-group">
+
+                    <label ng-bind="home.currentLocationString"></label>
+
+                    <md-list-item ng-repeat="poke in home.pokeList | selectedPokeOnly : home.wantedPokeList">
+
+                        <p>{{poke.name}} : {{ poke.lat+','+poke.lng }} </p>
+
+                        <a href="" ngclipboard data-clipboard-text="{{ poke.lat+','+poke.lng }}">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i>
+
+                        </a>
+                    </md-list-item>
+
+                </div>
+
+
+
+
+
+
+            </form>
+        </md-content>
+
+
+
