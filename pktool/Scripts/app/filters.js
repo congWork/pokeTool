@@ -13,7 +13,7 @@
                 var result = [];
                 angular.forEach(items,
                     function(item) {
-                        if (isInList(wantedPokeList,item.name)) {
+                        if (isInList(wantedPokeList, item.pokemon_name)) {
                             result.push(item);
                         }
                     });

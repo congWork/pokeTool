@@ -20,7 +20,21 @@
             vm.pokeList = [];
             vm.dropDownPokeNameSource = ['name1', 'name2','dratini'];
             vm.wantedPokeList = [];
-
+            appServices.get("s")
+                .then(function (d) {
+                    vm.pokeJsonDataSource = angular.toJson(d.data);
+                });
+            vm.cancelForm = function() {
+                vm.pokeJsonDataSource = "";
+            };
+            vm.submitForm = function () {
+                try {
+                    vm.pokeList = angular.fromJson(vm.pokeJsonDataSource).pokemons;
+                } catch (ex) {
+                    alert('please paste your json string');
+                    return false;
+            }
+            };
             vm.copyLocation = function (toCopy) {
                
                 try {
@@ -48,15 +62,9 @@
                     clearMarkers();
                     addMarker(event.latLng, map);
 
-                    //get pok data
-                    appServices.get(vm.currentLocation).success(function (data) {
-                        if (data != null) {
-                            vm.pokeList = data;
-                        }
+                   
 
-                    }).error(function () {
-                        alert("Error");
-                    });
+                   
                 });
                 // Add a marker at the center of the map. 
                 addMarker(bangalore, map);
@@ -66,8 +74,13 @@
                 // Add the marker at the clicked location, and add the next-available label
                 // from the array of alphabetical characters.
                  marker = new google.maps.Marker({
-                    position: location, label: labels[labelIndex++ % labels.length], map: map
-                });
+                    position: location, label: "ssss", map: map
+                 });
+
+                 window.setTimeout(function () {
+                     //delete current marker
+                 }, 3000);
+
             }
             function clearMarkers() {
                 setMapOnAll(null);
