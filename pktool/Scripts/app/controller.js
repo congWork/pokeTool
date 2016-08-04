@@ -20,6 +20,14 @@
             vm.pokeList = [];
             vm.dropDownPokeNameSource = ['name1', 'name2','dratini'];
             vm.wantedPokeList = [];
+
+            vm.propertyName = 'expires';
+            vm.reverse = true;
+
+            vm.sortBy = function (propertyName) {
+               vm.reverse = (vm.propertyName === propertyName) ? !vm.reverse : false;
+                vm.propertyName = propertyName;
+            };
             appServices.get("s")
                 .then(function (d) {
                     vm.pokeJsonDataSource = angular.toJson(d.data);

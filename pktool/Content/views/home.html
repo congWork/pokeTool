@@ -32,8 +32,15 @@
     <div class="form-group">
 
         <label ng-bind="home.currentLocationString"></label>
-
-        <md-list-item ng-repeat="poke in home.pokeList | selectedPokeOnly : home.wantedPokeList">
+        <md-list-item ng-repeat="poke in home.pokeList | selectedPokeOnly : home.wantedPokeList |orderBy: vm.propertyName : vm.reverse">
+            <a href="" ng-click="vm.sortBy('pokemon_name')">
+                <i ng-show="propertyName === 'pokemon_name'" class="fa fa-chevron-up" ng-class="{reverse: fa-chevron-down}" aria-hidden="true"></i> Name
+            </a>
+            <a href="" ng-click="vm.sortBy('expires')">
+                <i ng-show="propertyName === 'expires'" class="fa fa-chevron-up" ng-class="{reverse: fa-chevron-down}" aria-hidden="true"></i> Duration
+            </a>
+        </md-list-item>
+        <md-list-item ng-repeat="poke in home.pokeList | selectedPokeOnly : home.wantedPokeList |orderBy: vm.propertyName : vm.reverse">
             
             <p>{{poke.pokemon_name}}({{poke.expires}}) : {{ poke.latitude+','+poke.longitude }} </p>
 
